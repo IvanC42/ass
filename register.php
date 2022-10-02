@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <meta name="author" content="David Grzyb">
+    <meta name="description" content="">
+
+    <!-- Tailwind -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="sweetalert2.all.min.js"></script>
+<script src="sweetalert2.min.js"></script>
+<link rel="stylesheet" href="sweetalert2.min.css">
+	<link rel="stylesheet" href="css/style.css">
+	<script>
+  function UpdateSuccess(){
+  Swal.fire({
+  icon: 'success',
+  title: 'Register Success!',
+  confirmButtonText: 'OK',
+  
+}).then(function() {
+    window.location = "login.php";
+});
+ }
+  
+  
+  
+  </script>
+	<?php
+	if(isset($_POST['rg'])){
+		$name=$_POST['name'];
+		$email=$_POST['email'];
+		$password=$_POST['password'];
+		$np =$_POST['np'];
+		$conn = mysqli_connect("127.0.0.1","root","","ass");
+		$sql2 = "SELECT * FROM user " ;
+		
+	}
+
+	?>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+
+        .font-family-karla {
+            font-family: karla;
+        }
+    </style>
+</head>
+<body class="bg-white font-family-karla h-screen" style="background-image: url(images/bg1.png);">
+
+    <div class="w-full flex flex-wrap">
+
+        <!-- Register Section -->
+        <div class="w-full md:w-1/2 flex flex-col">
+
+            <div >
+                
+				<img  src="vtc.png"  />
+            </div>
+
+            <div class="flex flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32">
+                <p class="text-center text-3xl text-dark">Join Us.</p>
+                <form class="flex flex-col pt-3 md:pt-8" method="POST">
+                    <div class="flex flex-col pt-4">
+                        <label for="name"  class="text-lg text-dark" >Name</label>
+                        <input type="text" name="name" id="name" placeholder="John Smith" class="form-control" required />
+                    </div>
+
+                    <div class="flex flex-col pt-4">
+                        <label for="email"  class="text-lg text-dark">Email</label>
+                        <input type="email" name="email" id="email" placeholder="your@email.com" class="form-control" required />
+                    </div>
+    
+                    <div class="flex flex-col pt-4">
+                        <label for="password"  class="text-lg text-dark ">Password</label>
+                        <input  name="np" id="password1" type="password" placeholder="Password" class="form-control" required  />
+						 
+                    </div>
+
+                    <div class="flex flex-col pt-4">
+                        <label for="confirm-password" class="text-lg text-dark">Confirm Password</label>
+                        <input name="password" id="password" type="password" placeholder="Password" class="form-control" required />
+                    </div>
+					<p style="color:red;"><?php
+					if(isset($_POST['rg'])){
+						$rs=mysqli_query($conn,$sql2);
+						while($rc= mysqli_fetch_assoc($rs)){
+							if($email==$rc['email']){
+								echo 'this email is exist!';
+								break;
+					}else if($np!=$password){
+					echo 'Your password does not meet the requirements';
+					break;
+	}else{
+		$sql = "INSERT INTO user(name,password,email,UserAccount) VALUES('".$name."','".$password."','".$email."','Normal_user')" ;
+		mysqli_query($conn,$sql);
+		 ?>
+		<script type="text/javascript">
+		UpdateSuccess(); 		
+	</script>
+	<?php
+	break;
+		
+	}}
+						}
+					
+						
+					
+	
+	?></p>
+					  <div id="popover-password" class="mb-2">
+                <p><span id="result"></span></p>
+                <div class="progress">
+                    <div id="password-strength"
+                    class="progress-bar"
+                    role="progressbar"
+                    aria-valuenow="40"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                    style="width: 0%" >
+                    </div>
+                </div>
+            </div>
+            <ul class="list-unstyled" aria-hidden="true">
+                <li class="">
+                    <span style="color:black" class="low-upper-case"><i class="fa fa-circle" aria-hidden="true"></i>
+                        &nbsp;lowercase &amp; uppercase
+                    </span>
+                </li>
+                <li>
+                    <span style="color:black" class="one-number"><i class="fa fa-circle" aria-hidden="true"></i>
+                        &nbsp;Numbers (0-9)
+                    </span>
+                </li>
+                <li>
+                    <span style="color:black" class="one-special-char"><i class="fa fa-circle" aria-hidden="true"></i>
+                        &nbsp;Special characters (%&+^^)
+                    </span>
+                </li>
+                <li>
+                    <span style="color:black" class="eight-character"><i class="fa fa-circle" aria-hidden="true"></i>
+                        &nbsp;Minimum 8 characters
+                    </span>
+                </li>
+				<li>
+                    <span style="color:black" class="Same"><i class="fa fa-circle" aria-hidden="true"></i>
+                        &nbsp;The above password is same
+                    </span>
+                </li>
+            </ul>
+				 <div class="flex flex-col pt-4">
+	            	<input type="submit" name="rg"  id="rg" value="Register" class="form-control btn btn-primary submit px-3"/>
+	            </div>
+              
+                </form>
+                <div class="text-center pt-12 pb-12">
+                    <p  class="text-dark">Already have an account? <a href="login.php" class="underline font-semibold">Log in here.</a></p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Image Section -->
+        <div class="w-1/2 shadow-2xl">
+            <img class="object-cover w-full h-screen hidden md:block" src="bg1.png"  />
+        </div>
+    </div>
+
+</body>
+<script src="script.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</html>

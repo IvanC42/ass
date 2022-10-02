@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+$conn = mysqli_connect("127.0.0.1","root","","ass");
+require 'C:\Users\aaddmin\vendor\autoload.php';
+	if(isset($_POST['send'])){	
+	$email=$_POST['email'];
+	
+	$mail = new PHPMailer(true); 
+	
+	try {
+		$mail->SMTPDebug = 0;
+
+		$mail->isSMTP();  
+		
+		$mail->Host = 'smtp.gmail.com';  // Specify main and backup SMTP servers
+		$mail->SMTPAuth = true; 
+		
+		$mail->Username = 'vtctesting2023@gmail.com';                 // SMTP username
+		$mail->Password = 'ypxapktmjijmgtqq'; 
+		$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;  
+		$mail->Port = 587; 
+		$mail->CharSet ="utf-8";
+		$mail->setFrom('xxxx@gmail.com', 'adnan-tech.com');
+		$mail->addAddress($email, 'Joe User');
+		$mail->isHTML(true);  
+		$verification_code=substr(number_format(time()*rand(),0,'',''),0,6);
+		$mail->Subject = 'verification_code';
+		$mail->Body    = '<p>Your verification code is :<b style="font-size: 30px;">'.$verification_code.'</b></p>';
+		$mail->send();
+		
+		
+		
+		
+		$sql = "UPDATE user SET verification_code ='".$verification_code."' WHERE email ='".$email."' " ;
+		mysqli_query($conn,$sql);
+		
+	}catch (Exception $e) {
+    echo '邮件发送失败: ', $mail->ErrorInfo;
+}
+session_start();
+$_SESSION['EM'] = $email;
+}
+
+?>
+
+
+
+
+
+
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/style.css">
+ 
+ 
+	<body class="img js-fullheight" >
+	
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<h3 class="mb-4 text-center text-dark">Forgot Your Password?</h3>
+		      	<form method="POST" class="signin-form">
+		      		<div class="form-group">
+		      			<input type="text" value="<?php
+if(isset($_POST['send'])){echo $email;}?>"name="email"class="form-control-bye" placeholder="Email" required>
+		      		</div>
+	            <div class="form-group">
+	              <input type="text" name="verificationCode" class="form-control-hi" placeholder="verification code"  >
+				  <button name="send"  class="  btn-primary-hi submit px-5" >send code</button>
+				  <p><?php  if(isset($_POST['send'])){echo 'Please Check your email,verification code has been sent! ';}
+if(isset($_POST['next'])){
+	$email=$_POST['email'];
+$VC=$_POST['verificationCode'];
+$sql1 = "SELECT * FROM user WHERE email='".$email."'";
+$rs = mysqli_query($conn,$sql1)or die(mysqli_error($conn));
+while($rc= mysqli_fetch_assoc($rs)){
+	$a = $rc['verification_code'];
+}
+if($a== $VC){
+	header('location:confirmpassword.php');
+}else{
+	echo "This is invaild code";
+}
+}				  ?></p>
+	            
+	            </div>
+	            <div class="form-group">
+	            	<button type="submit" name="next" class="w-100  btn-lg btn-primary-hi">Verify Email</button>
+	            </div>
+	           
+	          </form>
+			 
+	         
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>
+

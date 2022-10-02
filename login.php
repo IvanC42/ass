@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  	<title>Login Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/style.css">
+
+	</head>
+	<body class="img js-fullheight" style="background-image: url(images/bg.png);">
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row justify-content-center">
+				<div class="col-md-6 col-lg-4">
+					<div class="login-wrap p-0">
+		      	<h3 class="mb-4 text-center">Welcome</h3>
+		      	<form action="#" method="POST" class="signin-form">
+		      		<div class="form-group">
+		      			<input type="text" name="email" class="form-control" placeholder="Email" required>
+		      		</div>
+	            <div class="form-group">
+	              <input id="password-field"  name="password" type="password" class="form-control" placeholder="Password" required>
+	              <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+				 
+	            </div>
+				 <p style="color:pink;"><?php
+if(isset($_POST['login'])){
+	echo "Your password or email is invaild!";
+	$email=$_POST['email'];
+	$password=$_POST['password'];
+	$conn = mysqli_connect("127.0.0.1","root","","ass");
+	$sql ="SELECT * FROM user";
+	$rs = 	mysqli_query($conn,$sql)
+		or die(mysqli_error($conn));
+		while($rc=mysqli_fetch_assoc($rs)){
+						
+	
+	
+	
+			if($email==$rc['email']&&$password==$rc['password']&&$rc['UserAccount']=="Normal_user"){
+				header("Location: main.php");
+				
+			}else if($email==$rc['email']&&$password==$rc['password']&& $rc['UserAccount']=="Operator"&&$rc['loginTime']=="0"){
+				session_start();
+				$_SESSION['EM'] = $email;
+				$sqc ="UPDATE  user SET LoginTime =1 WHERE email = '".$email."'";
+				mysqli_query($conn,$sqc)
+				or die(mysqli_error($conn));
+				header("Location: Reset.php");
+			}else if($email==$rc['email']&&$password==$rc['password']&& $rc['UserAccount']=="Operator"){
+				header("Location: main(OP).php");
+			}else if($email==$rc['email']&&$password==$rc['password']&& $rc['UserAccount']=="Administrator"){
+				header("Location: main(AD).php");
+			}else{
+						
+			
+			}
+		}		
+		
+}
+?></p>
+	            <div class="form-group">
+	            	<button type="submit" name="login" class="form-control btn btn-primary submit px-3">Sign In</button>
+	            </div>
+	            <div class="form-group d-md-flex">
+	            	<div class="w-50">
+		            	<label class="checkbox-wrap checkbox-primary">Remember Me
+									  <input type="checkbox" checked>
+									  <span class="checkmark"></span>
+									</label>
+								</div>
+								
+								<div class="w-50 text-md-right">
+									<a class="txt1" href="Forgot.php">
+										Forgot Password
+										<i class="fa fa-long-arrow-right"></i>					
+									</a>
+								</div>
+	            </div>
+	          </form>
+			  <div class="w-100 text-center">
+				<a href="register.php" style="color: #fff">Create new account</a>
+			</div>
+	         
+		      </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>
+
