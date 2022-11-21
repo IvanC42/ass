@@ -10,13 +10,28 @@
   <link rel="stylesheet" href="./css1/style.css">
 </head>
 <body>
+<?php 
+session_start(); 
+if(isset($_GET["userId"]))
+{
+	$_SESSION["userId"]=$_GET["userId"];
+	header("location: chatbox.php");
+}
+ ?>
   <header>
     <nav class="navbar">
       <div class="bottom-nav">
-        <ul class="bottom-nav-list">
+        <ul class="bottom-nav-list">  
+		<?php 
+		   $connect = mysqli_connect("127.0.0.1","root","","ass");
+			$users= mysqli_query($connect,"SELECT * FROM user WHERE ID = 35 ")or die(mysqli_error());
+			$user=mysqli_fetch_assoc($users);
+			echo '<li><a href="main(OP).php?userId='.$user["ID"].'">Online Contact</a></li>'
+		   ?>
            <li><a href="#">Booking Record</a></li>
-          <li><a href="booking.php">Buy Ticket</a></li>
-          <li><a href="main.php">My Page</a></li>
+		 
+		    
+          <li><a href="main(OP).php">My Page</a></li>
           <li><a href="login.php"> Log Out</a></li>
 		  
         </ul>
@@ -40,7 +55,7 @@
     </nav>
   </header>
   <main>
-    <h2 class="text-center heading-dash"> All Tickets <i class="fas fa-ticket-alt"></i> <span></span></h2>
+    <h2 class="text-center heading-dash"> All Booking Tickets <i class="fas fa-ticket-alt"></i> <span></span></h2>
     
   </main>
 

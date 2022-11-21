@@ -1,6 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"><?php 
+session_start(); 
+if(isset($_GET["userId"]))
+{
+	$_SESSION["userId"]=$_GET["userId"];
+	header("location: chatbox.php");
+}
+ ?>
 <head>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VTC - Book Online Airline Tickets</title>
@@ -81,6 +89,10 @@ border-color:#0000ff;
     txt1.style.borderColor ="grey";
 	txt2.style.borderColor ="grey";
 	txt3.style.borderColor ="grey";
+	txt1.value ="";
+	txt2.value ="";
+	txt3.value ="";
+	IDNotExist();
     return false;
     }
 	
@@ -103,7 +115,13 @@ border-color:#0000ff;
     <nav class="navbar">
       <div class="bottom-nav">
         <ul class="bottom-nav-list">
-           <li><a href="createOP(AD).php">Create account</a></li>
+		<?php 
+		   $connect = mysqli_connect("127.0.0.1","root","","ass");
+			$users= mysqli_query($connect,"SELECT * FROM user WHERE ID = 36 ")or die(mysqli_error());
+			$user=mysqli_fetch_assoc($users);
+			echo '<li><a href="main(OP).php?userId='.$user["ID"].'">Contact Operater</a></li>'
+		   ?>
+           <li><a href="createOP(AD).php">Create Account</a></li>
           <li><a href="main(AD).php">My Page</a></li>
           <li><a href="login.php"> Log Out</a></li>
 		  
@@ -163,7 +181,7 @@ border-color:#0000ff;
             </div>
 			<div class="col-8">
 			</br>
-          <button class="w-50 btn btn-primary " name="create"> <!--onclick="return NullCheck();"-->  Create</button>
+          <button class="w-50 btn btn-primary " name="create"onclick="return NullCheck();"> <!--      -->  Create</button>
 		  
 		   </div>
 		  </div>

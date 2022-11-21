@@ -11,8 +11,18 @@
   <link rel="stylesheet" href="./css1/style.css">
   <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
   
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+   
   
 <style>
+<?php 
+session_start(); 
+if(isset($_GET["userId"]))
+{
+	$_SESSION["userId"]=$_GET["userId"];
+	header("location: chatbox.php");
+}
+ ?>
 .styled-table {
     border-collapse: collapse;
     margin: 25px 0;
@@ -40,6 +50,14 @@
 }.styled-table tbody tr.active-row {
     font-weight: bold;
     color: #009879;
+}input {
+  width: 100%;
+  height:100%;
+  padding: 12px 20px;
+}button {
+  width: 100%;
+  height:100%;
+  padding: 12px 20px;
 }
 
 </style>
@@ -50,7 +68,13 @@
     <nav class="navbar">
       <div class="bottom-nav">
         <ul class="bottom-nav-list">
-           <li><a href="createOP(AD).php">Create account</a></li>
+		<?php 
+		   $connect = mysqli_connect("127.0.0.1","root","","ass");
+			$users= mysqli_query($connect,"SELECT * FROM user WHERE ID = 36 ")or die(mysqli_error());
+			$user=mysqli_fetch_assoc($users);
+			echo '<li><a href="main(OP).php?userId='.$user["ID"].'">Contact Operater</a></li>'
+		   ?>
+           <li><a href="createOP(AD).php">Create Account</a></li>
           <li><a href="main(AD).php">My Page</a></li>
           <li><a href="login.php"> Log Out</a></li>
 		  
@@ -75,7 +99,7 @@
   <main class="text-center" >
     <h2 class="text-center heading-dash"> All User <i class='fas fa-user-alt'></i> <span></span></h2>
 	
-	 <input type="text" placeholder="Search for User" class="search-input" /><i class='fas fa-tag'></i> 
+	 
 	 
 	 <?php
 $conn = mysqli_connect("127.0.0.1","root","","ass");
@@ -85,21 +109,20 @@ $rs = 	mysqli_query($conn,$sql)
 		
 		
 echo '<form method="post" action="main(AD).php " >'	;	
-echo '<table border="1" class="styled-table" style="border:1px solid black;margin-left:auto;margin-right:auto;"><thead><tr>
+echo '<table border="1" class="table table-bordered"  style="border:1px solid black;margin-left:auto;margin-right:auto; "><thead><tr>
 
 <th> Name</th>
 <th> Password</th>
 <th>Email</th>
 <th>Position</th>
-<th>Update</th>
-<th>Delete</th></tr>';
+</tr>';
 		
 while($rc= mysqli_fetch_assoc($rs)){
-	printf('<tr>
-	<td> %s </td>
-	<td>%s </td>
-	<td>%s </td>
-	<td>%s </td><td><i class="fas fa fa-save" style="font-size:26px"></i> </td><td> <i class="fas fa-trash-alt" style="font-size:26px"></i>  </td></tr>',$rc['name'],$rc['password'],$rc['email'],$rc['UserAccount']);
+	printf('<tr id="1">
+	<td class="hiderow"> <input type="text" value="%s"   /></td>
+	<td class="hiderow"><input type="text"  value=%s /></td>
+	<td class="hiderow"><input type="text"  value=%s readonly /> </td>
+	<td class="hiderow"><input type="text"  value=%s readonly /></td></tr>',$rc['name'],$rc['password'],$rc['email'],$rc['UserAccount']);
 	
 }
  echo'</form>';
@@ -108,7 +131,6 @@ while($rc= mysqli_fetch_assoc($rs)){
 	
   
   </main>
-
 
 </body>
 

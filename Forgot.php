@@ -59,14 +59,14 @@ $_SESSION['EM'] = $email;
 	<link rel="stylesheet" href="css/style.css">
  
  
-	<body class="img js-fullheight" >
+	<body class="img js-fullheight"  style="background-image: url(images/bg1.png);" >
 	
 	<section class="ftco-section">
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-md-6 col-lg-4">
 					<div class="login-wrap p-0">
-		      	<h3 class="mb-4 text-center text-dark">Forgot Your Password?</h3>
+		      	<h3 class="mb-4 text-center ">Forgot Your Password?</h3>
 		      	<form method="POST" class="signin-form">
 		      		<div class="form-group">
 		      			<input type="text" value="<?php

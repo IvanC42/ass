@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+require 'init_conn_db.php';   
+session_start(); 
+	if(isset($_GET["userId"]))
+{
+	$_SESSION["userId"]=$_GET["userId"];
+	header("location: chatbox.php");
+}
+ ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,11 +20,17 @@
 </head>
 <body>
   <header>
-    <nav class="navbar">
+  <nav class="navbar">
       <div class="bottom-nav">
         <ul class="bottom-nav-list">
-           <li><a href="#">Booking Record</a></li>
-         <li><a href="booking.php">Buy Ticket</a></li>
+		<?php 
+    
+		   $connect = mysqli_connect("127.0.0.1","root","","ass");
+			$users= mysqli_query($connect,"SELECT * FROM user WHERE ID = 2 ")or die(mysqli_error());
+			$user=mysqli_fetch_assoc($users);
+			echo '<li><a href="main.php?userId='.$user["ID"].'">Online Help</a></li>'
+		   ?>		
+           <li><a href="booking.php">Booking Record</a></li>
           <li><a href="main.php">My Page</a></li>
           <li><a href="login.php"> Log Out</a></li>
 		  
@@ -24,17 +39,7 @@
         <div class="top-nav">
         <div class="left-nav">
         <a href="index.html"><img src="vtc.png" alt="logo" class="nav-item logo logo-nav"></a>
-        <div class="nav-item">
-		<a href="#" ><i class="fas "></i> From </a>
-        <a href="#" class="current-loc"><i class="fas fa-map-marker-alt"></i> HONGKONG</a>
-		<a href="#" ><i class="fas "></i> To</a>
-        <select class="nav-item locations">
-          <option value="" disabled selected>Change location</option>
-          <option value="Shanghai">Shanghai Pudong International Airport</option>
-          <option value="Kansai">Kansai Airports</option>
-          <option value="Taoyuan">Taoyuan International Airport</option>
-          
-        </select>
+
         
       </div>
     </div>
@@ -43,62 +48,124 @@
           <a href="#" class="nav-item"><i class="fas fa-bars"></i></a>
         </div>
       </div>
-    
     </nav>
+<style>
+div.gallery {
+  border: 1px solid #ccc;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+}
+
+div.desc {
+  padding: 15px;
+  text-align: center;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.responsive {
+  float: left;
+  width: 30%;
+}
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+  </style>
   </header>
   <main>
-    <h2 class="text-center heading-dash"> Buy Tickets <i class="fas fa-ticket-alt"></i> <span></span></h2>
+  <h2 class="text-center">Searching Airline<i class="fas fa-ticket-alt"></i> <span></span></h2>
+  <div class="responsive">
+  <div class="gallery">
+  <a target="_blank" href="https://www.kansai-airport.or.jp/en/">
+    <img src="hero.jpg"  width="600" height="400" >
+    </a>
+    <div class="desc">Click The Picture About Kansai</div>
+  </div>
+</div>
+<div class="responsive">
+  <div class="gallery">
+  <a target="_blank" href="https://www.shanghaiairport.com/index_en.html">
+    <img src="ShangHai.jpg" width="600" height="400">
+    </a>
+    <div class="desc">Click The Picture About ShangHai </div>
+  </div>
+</div>
+<div class="responsive">
+  <div class="gallery">
+    <a target="_blank" href="https://www.taoyuan-airport.com/">
+    <img src="Taoyuen.jpg" width="600" height="400">
+    </a>
+    <div class="desc">Click The Picture About TaoYuen </div>
+  </div>
+</div>
+<div>
+</div>
+  <form action="search.php" method="post">
     <section class="main-section">
     <div class="booking-heading">
-    <h4 class="text-center"><span><i class="fas fa-circle"></i>Step 1</span> Please select Category,number of people and Cabin</h4>
+    <h4 class="text-center"><span><i class="fas fa-circle"></i>Step 1</span> Please select Departure,Location</h4>
   </div>
 
   <div class="date-n-cinema">
     
-    <select class="pick-multiplex">
-      <option value="" disabled selected>Select Category</option>
-      <option value="1">Gold</option>
-      <option value="2">Normal</option>
+    <select class="pick-multiplex" select value="0" name="dep_city">
+      <option value="HK">Hong Kong</option>
     </select>
-    <select class="pick-multiplex">
-      <option value="" disabled selected>Select No of tickets</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-    </select>
-	<select class="pick-multiplex">
-      <option value="" disabled selected>Cabin</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
+    <select class="pick-multiplex" select value="0" name="arr_city" >
+      <option value="" disabled selected>Select Location</option>
+      <option value="Shanghai" jose="">Shanghai Pudong</option>
+      <option value="Kansai">Kansai</option>
+      <option value="Taoyuan">Taoyuan</option>
     </select>
     
   </div>
 
   <div class="booking-heading">
-    <h4 class="text-center"><span><i class="fas fa-circle"></i>Step 2</span> Please select the Movie, show-time and seats.</h4>
+    <h4 class="text-center"><span><i class="fas fa-circle"></i>Step 2</span> Please select Depart Date And Time, Number Of Adult and Children</h4>
   </div>
 
 
 
 <div class="date-n-cinema">
 	<p style="color:white;">Departure date</p>
-    <input type="date" value="2020-03-30"
-    min="2020-01-01" max="2018-12-31" class="input-date">
-	<p style="color:white;">Departure date</p>
-	<input type="date" value="2020-03-30"
-    min="2020-01-01" max="2018-12-31" class="input-date">
+  <input class="form-control" name="dep_date" type="date" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'mm/dd/yyyy';}" required="">
 	
-    <select class="pick-multiplex">
-      <option value="" disabled selected>Select Multiplex</option>
-      <option value="1">Demo Multiplex</option>
-      <option value="2">Demo Multiplex</option>
-      <option value="3">Demo Multiplex</option>
-      <option value="4">Demo Multiplex</option>
-      <option value="5">Demo Multiplex</option>
-      <option value="6">Demo Multiplex</option>
-      <option value="7">Demo Multiplex</option>
+    <select class="pick-multiplex" name="NoOfAdult">
+      <option value="" disabled selected>Number Of Adult</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
     </select>
-    <input type="submit" class="type-submit">
+    <select class="pick-multiplex" name="NoOfKid">
+      <option value="" disabled selected>Number Of Children</option>
+      <option value="1">0</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+    </select>
+    <input class="bi bi-search" type="submit"  value="Search Flights" name="search_but">
   </div>
+</form>
 
 
 
