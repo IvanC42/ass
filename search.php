@@ -3,6 +3,14 @@ require 'init_conn_db.php';
 ?> 	
 <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200&display=swap" rel="stylesheet">
 <head>
+<?php 
+session_start(); 
+	if(isset($_GET["userId"]))
+{
+	$_SESSION["userId"]=$_GET["userId"];
+	header("location: chatbox.php");
+}
+ ?>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VTC - Book Online Airline Tickets</title>
@@ -26,12 +34,7 @@ h1{
 	margin-top:20px;
 	text-align:center;
 }
-body {
-  background-color: white;;  
-  background: -webkit-linear-gradient(to right, #2c3e50, #bdc3c7); 
-  background: linear-gradient(to right, #2c3e50, #bdc3c7); 
 
-}
 th {
   font-size: 22px;
 }
@@ -41,16 +44,29 @@ td {
   font-weight: bold;
   color: #424242;
 }
+td.details-control {
+    background:url("https://purepng.com/public/uploads/large/purepng.com-eyeseyesorgans-of-the-visual-systemorganisms-visionoptical-systemlightfocuseslensclipart-1421526883579uxc0i.png")  no-repeat center center;
+    cursor: pointer;
+    background-size: 80px 80px;
+}
+tr.details td.details-control {
+    background: url('close.png') no-repeat center center;
+    background-size: 80px 80px;
+}
 </style>
 <header>
-    <nav class="navbar">
+<nav class="navbar">
       <div class="bottom-nav">
         <ul class="bottom-nav-list">
-           <li><a href="main.php">Booking Record</a></li>
-          <li><a href="booking.php">Buy Ticket</a></li>
+		<?php 
+		   $connect = mysqli_connect("127.0.0.1","root","","ass");
+			$users= mysqli_query($connect,"SELECT * FROM user WHERE ID = 2 ")or die(mysqli_error());
+			$user=mysqli_fetch_assoc($users);
+			echo '<li><a href="main.php?userId='.$user["ID"].'">Online Help</a></li>'
+		   ?>		
+           <li><a href="booking.php">Booking Record</a></li>
           <li><a href="main.php">My Page</a></li>
           <li><a href="login.php"> Log Out</a></li>
-		  
         </ul>
   </div>
         <div class="top-nav">
@@ -69,10 +85,15 @@ td {
     </nav>
   </header>
     <main>
+      
         <?php if(isset($_POST['search_but'])) { 
             $dep_date = $_POST['dep_date'];                            
             $dep_city = $_POST['dep_city'];  
-            $arr_city = $_POST['arr_city'];     
+            $arr_city = $_POST['arr_city'];
+            $No_Children=$_POST['NoOfKid'];
+            $No_Adult=$_POST['NoOfAdult'];
+            $_SESSION['$No_Adult']=$No_Adult;
+            $_SESSION['$No_Children']=$No_Children;
 
             if($dep_city === $arr_city){
               header('Location: index.php?error=sameval');
@@ -91,13 +112,17 @@ td {
             <h1 class="display-4 text-center text-light"
               >SEARCHING RESULT FROM: <br> <?php echo $dep_city; ?> 
                  to <?php echo $arr_city ?> </h1>
+            <form method="post" action='buy.php'>
             <table class="table table-striped table-bordered table-hover">
               <thead>
                 <tr class="text-center">
+                  <th scope="col"></th>
+                  <th scope="col">FlightID</th>
                   <th scope="col">Airline</th>
                   <th scope="col">Departure</th>
                   <th scope="col">Arrival</th>
-                  <th scope="col">Airline</th>
+                  <th scope="col">Depature Airport</th>
+                  <th scope="col">Available Seats</th>
                   <th scope="col">Fare</th>
                   <th scope="col">Buy</th>
                 </tr>
@@ -111,44 +136,29 @@ td {
                 mysqli_stmt_execute($stmt);
                 $result = mysqli_stmt_get_result($stmt);
                 while ($row = mysqli_fetch_assoc($result)) {
+                  $id=(int)$row["flight_id"];
                   $price = (int)$row['Price'];  
                   echo "
-                  <tr class='text-center'>                  
+                  <tr class='text-center'> 
+                    <td class='details-control'></td>
+                    <td><input type='hidden' name='flight_id' value='$id'>".$id."</td>            
                     <td>".$row['airline']."</td>
                     <td>".$row['departure']."</td>
                     <td>".$row['arrival']."</td>
+                    <td>".$row['DepatureAirports']."</td>
                     <td>".$row['Seats']."</td>                   
-                    <td>$ ".$price."</td>
-                    ";
-                  if(isset($_SESSION['userId']) && $row['status'] === '') {   
-                    echo " <td>
-                    <form action='pass_form.php' method='post'>
-                    <input name='flight_id' type='hidden' value=".$row['flight_id'].">
-                      <input name='type' type='hidden' value=".$type.">
-                      <input name='passengers' type='hidden' value=".$passengers.">
-                      <input name='price' type='hidden' value=".$price.">
-                      <input name='ret_date' type='hidden' value=".$ret_date.">
-                      <input name='class' type='hidden' value=".$f_class.">
-                      <button name='book_but' type='submit' 
-                      class='btn btn-success mt-0'>
-                      <div style=''>
-                      <i class='fa fa-lg fa-check'></i>  
-                      </div>
-                    </button>
-                    </form>
-                    </td>                                                       
-                    "; 
-                  } elseif (isset($_SESSION['userId']) && $row['status'] === 'dep') {
-					echo "<td>Not Available</td>";
-				  } else {
-                    echo "<td>Buy</td>";
-                  }
-                  echo '</tr> ';                 
+                    <td>$ ".$price." up</td>
+                    <td><input type='submit' value='Buy''></td></a>
+                    ";                
                 }
                 ?>
 
               </tbody>
             </table>
+              </form>
+            <i class="bi bi-arrow-return-left">
+            <button type="button" onclick="history.back()">Back</button>
+            </i>
               </div>
             <script src="https://code.jquery.com/jquery-3.6.1.min.js"
             integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
@@ -158,6 +168,38 @@ td {
               $(document).ready( function () {
                 $('.table').DataTable();
 } );
+var detailRows=[];
+$('.table').DataTable().on('draw', function () {
+        detailRows.forEach(function(id, i) {
+            $('#' + id + ' td.details-control').trigger('click');
+        });
+      });
+      $('.table tbody').on('click', 'tr td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = $('.table').DataTable().row(tr);
+        var idx = detailRows.indexOf(tr.attr('id'));
+ 
+        if (row.child.isShown()) {
+            tr.removeClass('details');
+            row.child.hide();
+ 
+            detailRows.splice(idx, 1);
+        } else {
+            tr.addClass('details');
+            row.child(format(row.data())).show();
+            if (idx === -1) {
+                detailRows.push(tr.attr('id'));
+            }
+        }
+    });
+  function format(d) {
+    return (
+        'Available Encnomy Class ' +
+        ' : 42' +
+        '<br>' +
+        'Available Business Class : 20 ' 
+    );
+}
 </script>
           </div>
         <?php } ?>

@@ -29,7 +29,96 @@
 });
  }
   
-  
+   function NullCheck(){
+   
+    var txt1=document.getElementById('name');
+	var txt2=document.getElementById('email');
+	var txt3=document.getElementById('password1');
+	var txt4=document.getElementById('password');
+    if (txt1.value==''& txt2.value==''&txt3.value==''&txt4.value==''){
+        txt1.style.borderColor  = '#ff0000';
+		txt2.style.borderColor  = '#ff0000';
+		txt3.style.borderColor  = '#ff0000';
+		txt4.style.borderColor  = '#ff0000';
+        return false;
+        }else if(txt1.value==''& txt2.value==''& txt3.value==''){
+			txt1.style.borderColor  = '#ff0000';
+			txt2.style.borderColor  = '#ff0000';
+			txt3.style.borderColor  = '#ff0000';
+			 return false;
+		}else if(txt3.value==''& txt2.value==''&txt4.value==''){
+			txt3.style.borderColor  = '#ff0000';
+			txt2.style.borderColor  = '#ff0000';
+			txt4.style.borderColor  = '#ff0000';
+			 return false;
+		}else if(txt1.value==''& txt3.value==''&txt4.value==''){
+			txt1.style.borderColor  = '#ff0000';
+			txt3.style.borderColor  = '#ff0000';
+			txt4.style.borderColor  = '#ff0000';
+			 return false;
+		}else if(txt1.value==''& txt2.value==''&txt4.value==''){
+			txt1.style.borderColor  = '#ff0000';
+			txt2.style.borderColor  = '#ff0000';
+			txt4.style.borderColor  = '#ff0000';
+			 return false;
+		}else if(txt1.value==''& txt2.value==''){
+			txt1.style.borderColor  = '#ff0000';	
+			txt2.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt1.value==''& txt3.value==''){
+			txt1.style.borderColor  = '#ff0000';	
+			txt3.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt1.value==''& txt4.value==''){
+			txt1.style.borderColor  = '#ff0000';	
+			txt4.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt2.value==''& txt3.value==''){
+			txt3.style.borderColor  = '#ff0000';	
+			txt2.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt4.value==''& txt2.value==''){
+			txt4.style.borderColor  = '#ff0000';	
+			txt2.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt3.value==''& txt4.value==''){
+			txt3.style.borderColor  = '#ff0000';	
+			txt4.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt1.value==''){
+			txt1.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt2.value==''){
+			txt2.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt3.value==''){
+			txt3.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt4.value==''){
+			txt4.style.borderColor  = '#ff0000';			
+			 return false;
+		}else if(txt3.value!=txt4.value){
+			txt4.style.borderColor  = '#ff0000';
+			txt3.style.borderColor  = '#ff0000';		
+	txt1.style.borderColor ="grey";
+	txt2.style.borderColor ="grey";			
+			 return false;
+		}
+    else{
+    txt1.style.borderColor ="grey";
+	txt2.style.borderColor ="grey";
+	txt3.style.borderColor ="grey";
+	txt4.style.borderColor ="grey";
+	txt1.value ="";
+	txt2.value ="";
+	txt3.value ="";
+	txt4.value ="";
+	UpdateSuccess();
+    return false;
+    }
+	
+    return true;
+    }
   
   </script>
 	<?php
@@ -53,7 +142,7 @@
         }
     </style>
 </head>
-<body class="bg-white font-family-karla h-screen" style="background-image: url(images/bg1.png);">
+<body class="bg-white font-family-karla h-screen" style="background-image: url(images/bg2.png);">
 
     <div class="w-full flex flex-wrap">
 
@@ -156,7 +245,7 @@
                 </li>
             </ul>
 				 <div class="flex flex-col pt-4">
-	            	<input type="submit" name="rg"  id="rg" value="Register" class="form-control btn btn-primary submit px-3"/>
+	            	<input type="submit" name="rg" onclick="return NullCheck();" id="rg" value="Register" class="form-control btn btn-primary submit px-3"/>
 	            </div>
               
                 </form>
